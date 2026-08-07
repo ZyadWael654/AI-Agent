@@ -10,3 +10,4 @@ langgraph
 langgraph-checkpoint-sqlite
 python-dotenv
 sentence-transformers
+langchain-google-genai
