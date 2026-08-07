@@ -5,6 +5,7 @@ load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 if not GROQ_API_KEY or not TELEGRAM_BOT_TOKEN:
     raise ValueError("لازم تحط GROQ_API_KEY و TELEGRAM_BOT_TOKEN في ملف .env")

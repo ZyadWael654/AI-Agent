@@ -1,5 +1,7 @@
 from langchain_core.tools import tool
+from langchain_tavily import TavilySearch
 from rag import get_retriever
+from config import TAVILY_API_KEY
 
 # الـ retriever بيتحمل مرة واحدة بس لما الملف ده يتستورد
 retriever = get_retriever()
@@ -24,5 +26,6 @@ def get_weather(city: str) -> str:
     return f"درجة الحرارة في {city} حالياً هي 25 درجة مئوية والطقس مشمس."
 
 
-tools = [search_knowledge_base, get_weather]
+web_search = TavilySearch(max_results=3, tavily_api_key=TAVILY_API_KEY)
 
+tools = [search_knowledge_base, get_weather, web_search]
