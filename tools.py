@@ -30,6 +30,7 @@ def get_weather(city: str) -> str:
 web_search = TavilySearchResults(
     max_results=3,
     tavily_api_key=TAVILY_API_KEY,
+    name="web_search",
     description="استخدم هذه الأداة للبحث في الإنترنت عن الأخبار الحالية، الأرقام، الأسعار، أو المعارف العامة."
 )
 
