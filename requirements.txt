@@ -9,3 +9,4 @@ langchain-tavily==0.2.18
 langgraph
 langgraph-checkpoint-sqlite
 python-dotenv
+sentence-transformers
