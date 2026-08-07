@@ -25,3 +25,4 @@ def get_weather(city: str) -> str:
 
 
 tools = [search_knowledge_base, get_weather]
+
