@@ -26,6 +26,5 @@ def get_weather(city: str) -> str:
     return f"درجة الحرارة في {city} حالياً هي 25 درجة مئوية والطقس مشمس."
 
 
-web_search = TavilySearch(max_results=3, tavily_api_key=TAVILY_API_KEY)
-
+web_search = TavilySearch(max_results=3, tavily_api_key=TAVILY_API_KEY, topic="general")
 tools = [search_knowledge_base, get_weather, web_search]
