@@ -13,6 +13,5 @@ if not GROQ_API_KEY or not TELEGRAM_BOT_TOKEN:
 CHROMA_DIR = "./chroma_db"
 KNOWLEDGE_FILE = "knowledge.txt"
 MEMORY_DB = "agent_memory.db"
-
-EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 LLM_MODEL = "llama-3.3-70b-versatile"
