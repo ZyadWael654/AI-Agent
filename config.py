@@ -15,9 +15,10 @@ CHROMA_DIR = "./chroma_db"
 KNOWLEDGE_FILE = "knowledge.txt"
 MEMORY_DB = "agent_memory.db"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-LLM_MODEL = "gemini-1.5-flash"
 
-# تعريف الموديل باستخدام Gemini
+# استخدام gemini-1.5-flash-latest لحل مشكلة الـ 404
+LLM_MODEL = "gemini-1.5-flash-latest"
+
 llm = ChatGoogleGenerativeAI(
     model=LLM_MODEL,
     google_api_key=GOOGLE_API_KEY,
