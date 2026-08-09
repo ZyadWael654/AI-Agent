@@ -1,26 +1,30 @@
 import os
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
-
-if not GOOGLE_API_KEY or not TELEGRAM_BOT_TOKEN:
-    raise ValueError("لازم تحط GOOGLE_API_KEY و TELEGRAM_BOT_TOKEN في ملف .env")
 
 CHROMA_DIR = "./chroma_db"
 KNOWLEDGE_FILE = "knowledge.txt"
 MEMORY_DB = "agent_memory.db"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-# استخدام gemini-1.5-flash-latest لحل مشكلة الـ 404
-LLM_MODEL = "gemini-1.5-flash-latest"
+# موديل خفيف على Groq حدوده عالية جداً
+LLM_MODEL = "openai/gpt-oss-120b"
+llm = ChatGroq(
+    model_name=LLM_MODEL,
+    groq_api_key=GROQ_API_KEY,
+    temperature=0
+)
 
-llm = ChatGoogleGenerativeAI(
-    model=LLM_MODEL,
-    google_api_key=GOOGLE_API_KEY,
+VISION_MODEL = "qwen/qwen3.6-27b"
+
+llm_vision = ChatGroq(
+    model_name=VISION_MODEL,
+    groq_api_key=GROQ_API_KEY,
     temperature=0
 )

@@ -1,28 +1,21 @@
-import sqlite3
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.prebuilt import create_react_agent
 from config import llm, MEMORY_DB
 from tools import tools
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver
 
-SYSTEM_PROMPT = """Zyad Agent أنت مساعد شركة الزياد واسمك 
-
-عندك 3 أدوات:
-1. search_knowledge_base: استخدمها لو السؤال عن شركة الزياد نفسها (الخدمات، مواعيد العمل، سياسة الدعم، التأسيس).
-2. get_weather: استخدمها فقط لو السؤال عن الطقس أو درجة الحرارة صراحة.
-3. web_search: استخدمها فقط لو السؤال معلومة عامة من الإنترنت (أخبار، أحداث حالية، أسعار) ومش له علاقة بشركة الزياد ولا بالطقس.
-
-قواعد الاستخدام:
-- أي سؤال أو دردشة عادية غير كده، جاوب مباشرة من غير ما تستخدم أي أداة.
-- لو استخدمت search_knowledge_base ورجعتلك معلومات عن السؤال، اقرأها واذكر التفاصيل المطلوبة صراحة وبشكل واضح للمستخدم.
-- ممنوع تماماً استدعاء نفس الأداة أكثر من مرة لنفس السؤال. بمجرد حصولك على النتيجة من الأداة، قم بفرزها وصياغة الرد النهائي فوراً للمستخدم.
-- لو رجعتلك "معنديش معلومات عن السؤال ده في قاعدة المعرفة"، كخطوة تانية بدل ما ترد فوراً، استخدم web_search لو كان السؤال عام على الإنترنت.
-- لو السؤال أصلاً مش عن شركة الزياد ومفهوش كلمة طقس (زي "مين رئيس مصر" أو "سعر الدولار النهاردة")، استخدم web_search على طول من غير ما تحاول search_knowledge_base الأول.
-
-مهم جداً:
-أي نتيجة بترجعلك من أداة (search_knowledge_base أو web_search) هي مادة خام للقراءة، افهمها كويس، واكتب رد واضح بالعامية المصرية يشرح الإجابة بالتفصيل المناسب لسؤال المستخدم من غير حشو زائد ومن غير اختصار يضيع المعلومة.
-
-تحذير صارم:
-لو محتاج معلومة (اسم، تاريخ، رقم، مواعيد) ومفيش أي أداة رجعتلك إياها، قول بأمانة إنك معندكش المعلومة دي، ممنوع منعاً باتاً تخترع أو تولف أي معلومة مش موجودة حرفياً في نتيجة إحدى الأدوات."""
+prompt = ChatPromptTemplate.from_messages([
+    ("system", 
+     "أنت مساعد خدمة عملاء كافيه Brew & Co واسمك Brew Bot.\n\n"
+     "قواعد الإجابة:\n"
+     "1. للأسئلة المتعلقة بالكافيه (المنيو، الأسعار، المواعيد، التوصيل، طرق الدفع): استخدم أداة search_knowledge_base.\n"
+     "2. 'المنتجات المتاحة' في نتيجة البحث هي المنيو المتاح والأسعار، اذكرها للمستخدم مباشرة عند السؤال عن المنيو أو الأسعار.\n"
+     "3. لا تستخدم أداة web_search لأسئلة الكافيه إطلاقاً.\n"
+     "4. إذا لم تجد المعلومة في نتيجة البحث (مثل اسم المالك)، قل بوضوح: 'معنديش معلومات عن الموضوع ده'."
+    ),
+    MessagesPlaceholder(variable_name="messages"),
+])
 
 sqlite_conn = sqlite3.connect(MEMORY_DB, check_same_thread=False)
 memory = SqliteSaver(sqlite_conn)
@@ -30,6 +23,6 @@ memory = SqliteSaver(sqlite_conn)
 agent = create_react_agent(
     model=llm,
     tools=tools,
-    prompt=SYSTEM_PROMPT,
+    prompt=prompt,
     checkpointer=memory
 )

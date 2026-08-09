@@ -1,26 +1,36 @@
 from agent import agent
+import time
 
-# أسئلة اختبار + كلمات مفتاحية المفروض تكون موجودة في الرد الصح
+
+# أسئلة اختبار لكافيه Brew & Co + كلمات مفتاحية المفروض تكون موجودة في الرد الصح
 test_cases = [
     {
+        "question": "عندكم إيه في المنيو؟",
+        "expected_keywords": ["اسبريسو", "كابتشينو", "لاتيه"]
+    },
+    {
+        "question": "سعر الكابتشينو كام؟",
+        "expected_keywords": ["55"]
+    },
+    {
+        "question": "سعر التشيز كيك كام؟",
+        "expected_keywords": ["70"]
+    },
+    {
         "question": "مواعيد العمل عندكم إيه؟",
-        "expected_keywords": ["9", "5", "الأحد", "الخميس"]
+        "expected_keywords": ["8", "11"]
     },
     {
-        "question": "إيه هي خدمات الشركة؟",
-        "expected_keywords": ["ذكاء اصطناعي", "قواعد بيانات", "تطبيقات الويب"]
+        "question": "فيه توصيل؟",
+        "expected_keywords": ["5", "20", "استلام"]
     },
     {
-        "question": "سياسة الاسترجاع والدعم عندكم إيه؟",
-        "expected_keywords": ["24", "14"]
+        "question": "تقدروا تدفعوا بفيزا؟",
+        "expected_keywords": ["فيزا"]
     },
     {
-        "question": "مين رئيس الشركة؟",
-        "expected_keywords": ["معنديش", "مش موجود", "معندهاش", "لا يوجد"]
-    },
-    {
-        "question": "شركة الزياد اتأسست فين ومتى؟",
-        "expected_keywords": ["2026", "المنصورة"]
+    "question": "مين مالك الكافيه؟",
+    "expected_keywords": ["معنديش", "مش موجود", "معندهاش", "لا يوجد", "معندكش"]
     },
 ]
 
@@ -30,19 +40,28 @@ def run_evaluation():
     failed = 0
 
     print("=" * 50)
-    print("بدء تقييم الـ RAG")
+    print("بدء تقييم الـ RAG - Brew & Co")
     print("=" * 50)
 
     for i, case in enumerate(test_cases, 1):
-        config = {"configurable": {"thread_id": f"eval_test_{i}"}}
-        response = agent.invoke(
-            {"messages": [("user", case["question"])]},
-            config=config
-        )
-        answer = response["messages"][-1].content
+       # في evaluate.py داخل الـ loop
+        config = {"configurable": {"thread_id": f"test_run_{time.time()}_{i}"}}
+        
+        try:
+            response = agent.invoke(
+                {"messages": [("user", case["question"])]},
+                config=config
+            )
+            answer = response["messages"][-1].content
+        except Exception as e:
+            answer = f"[خطأ في الاستدعاء: {e}]"
 
         normalized_answer = answer.replace(" ", "").replace("ـ", "")
-        found = any(keyword.replace(" ", "") in normalized_answer for keyword in case["expected_keywords"])
+        found = any(
+            keyword.replace(" ", "") in normalized_answer
+            for keyword in case["expected_keywords"]
+        )
+
         status = "✅ PASS" if found else "❌ FAIL"
         if found:
             passed += 1
@@ -53,6 +72,8 @@ def run_evaluation():
         print(f"السؤال: {case['question']}")
         print(f"الرد: {answer}")
         print(f"الكلمات المتوقعة: {case['expected_keywords']}")
+
+        time.sleep(3)  # استنى 3 ثواني بين كل سؤال والتاني
 
     print("\n" + "=" * 50)
     print(f"النتيجة النهائية: {passed} نجح / {failed} فشل من أصل {len(test_cases)}")
