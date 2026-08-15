@@ -13,7 +13,6 @@ KNOWLEDGE_FILE = "knowledge.txt"
 MEMORY_DB = "agent_memory.db"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-# موديل خفيف على Groq حدوده عالية جداً
 LLM_MODEL = "openai/gpt-oss-120b"
 llm = ChatGroq(
     model_name=LLM_MODEL,

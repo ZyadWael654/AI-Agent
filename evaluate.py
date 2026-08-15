@@ -2,7 +2,6 @@ from agent import agent
 import time
 
 
-# أسئلة اختبار لكافيه Brew & Co + كلمات مفتاحية المفروض تكون موجودة في الرد الصح
 test_cases = [
     {
         "question": "عندكم إيه في المنيو؟",
@@ -44,7 +43,7 @@ def run_evaluation():
     print("=" * 50)
 
     for i, case in enumerate(test_cases, 1):
-       # في evaluate.py داخل الـ loop
+        
         config = {"configurable": {"thread_id": f"test_run_{time.time()}_{i}"}}
         
         try:
@@ -73,7 +72,7 @@ def run_evaluation():
         print(f"الرد: {answer}")
         print(f"الكلمات المتوقعة: {case['expected_keywords']}")
 
-        time.sleep(3)  # استنى 3 ثواني بين كل سؤال والتاني
+        time.sleep(3)  
 
     print("\n" + "=" * 50)
     print(f"النتيجة النهائية: {passed} نجح / {failed} فشل من أصل {len(test_cases)}")

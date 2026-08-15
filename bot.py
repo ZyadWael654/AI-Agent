@@ -44,16 +44,14 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        # ناخد أعلى دقة متاحة للصورة
         photo_file = await update.message.photo[-1].get_file()
         downloaded_bytes = await photo_file.download_as_bytearray()
 
         image_base64 = base64.b64encode(downloaded_bytes).decode('utf-8')
 
-        # تحليل الصورة
+       
         image_description = analyze_image(image_base64)
 
-        # النص اللي المستخدم كتبه مع الصورة (لو موجود)
         caption = update.message.caption or "من غير تعليق"
 
         user_input = (

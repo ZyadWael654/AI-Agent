@@ -1,6 +1,5 @@
 import sqlite3
 
-# إنشاء أو الاتصال بقاعدة البيانات المحلية
 DB_NAME = "agent_memory.db"
 
 def init_db():

@@ -5,7 +5,6 @@ from config import TAVILY_API_KEY
 from config import llm_vision
 from langchain_core.messages import HumanMessage
 
-# الـ retriever بيتحمل مرة واحدة بس لما الملف ده يتستورد
 retriever = get_retriever()
 
 
@@ -28,7 +27,6 @@ def get_weather(city: str) -> str:
     return f"درجة الحرارة في {city} حالياً هي 25 درجة مئوية والطقس مشمس."
 
 
-# إنشاء Instance من Tavily لاستخدامه جوه الأداة
 tavily_instance = TavilySearchResults(
     max_results=3,
     tavily_api_key=TAVILY_API_KEY
